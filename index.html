@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pangkat Dalawa - Unofficial Seal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <div class="logo-frame">
+                    <img src="logo1.jpg" alt="Pangkat Dalawa Unofficial Seal" class="logo">
+                </div>
+                <div class="logo-text">
+                    <h1>UNOFFICIAL SEAL OF</h1>
+                    <h2>PANGKAT DALAWA</h2>
+                    <p class="subtitle">Member Authentication System</p>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="login-form active-form">
+                <h3><i class="fas fa-sign-in-alt"></i> Member Login</h3>
+                
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user-circle"></i> Username
+                    </label>
+                    <input 
+                        type="text" 
+                        id="loginUsername" 
+                        name="username" 
+                        placeholder="Enter your username" 
+                        required
+                        autocomplete="username"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <div class="password-container">
+                        <input 
+                            type="password" 
+                            id="loginPassword" 
+                            name="password" 
+                            placeholder="Enter your password" 
+                            required
+                            autocomplete="current-password"
+                        >
+                        <button type="button" class="toggle-password" data-target="loginPassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-unlock"></i> LOGIN
+                </button>
+                
+                <div class="form-links">
+                    <a href="#" class="link" id="showRegister">
+                        <i class="fas fa-user-plus"></i> Don't have account? Create Account
+                    </a>
+                    <a href="#" class="link" id="showForgot">
+                        <i class="fas fa-question-circle"></i> Forgot Password?
+                    </a>
+                </div>
+                
+                <div class="error-message" id="loginError"></div>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="register-form">
+                <h3><i class="fas fa-user-plus"></i> Create New Account</h3>
+                
+                <div class="form-group">
+                    <label for="regUsername">
+                        <i class="fas fa-user-circle"></i> Choose Username
+                    </label>
+                    <input 
+                        type="text" 
+                        id="regUsername" 
+                        name="username" 
+                        placeholder="Choose a username" 
+                        required
+                    >
+                    <small class="hint">Minimum 3 characters</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regPassword">
+                        <i class="fas fa-lock"></i> Create Password
+                    </label>
+                    <div class="password-container">
+                        <input 
+                            type="password" 
+                            id="regPassword" 
+                            name="password" 
+                            placeholder="Create a password" 
+                            required
+                        >
+                        <button type="button" class="toggle-password" data-target="regPassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <small class="hint">Minimum 6 characters</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">
+                        <i class="fas fa-lock"></i> Confirm Password
+                    </label>
+                    <div class="password-container">
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword" 
+                            placeholder="Confirm your password" 
+                            required
+                        >
+                        <button type="button" class="toggle-password" data-target="confirmPassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="register-btn">
+                    <i class="fas fa-user-check"></i> CREATE ACCOUNT
+                </button>
+                
+                <div class="form-links">
+                    <a href="#" class="link" id="showLogin">
+                        <i class="fas fa-arrow-left"></i> Back to Login
+                    </a>
+                </div>
+                
+                <div class="error-message" id="registerError"></div>
+                <div class="success-message" id="registerSuccess"></div>
+            </form>
+
+            <!-- Forgot Password Panel -->
+            <div id="forgotPanel" class="forgot-panel">
+                <h3><i class="fas fa-key"></i> Forgot Password</h3>
+                <div class="forgot-content">
+                    <div class="forgot-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <p>If you've forgotten your password, please contact the system administrator for assistance.</p>
+                    
+                    <div class="admin-contact">
+                        <h4><i class="fas fa-user-shield"></i> Contact Administrator</h4>
+                        <div class="contact-info">
+                            <p><i class="fas fa-envelope"></i> Email: admin@pangkatdalawa.com</p>
+                            <p><i class="fas fa-phone"></i> Phone: (02) 1234-5678</p>
+                            <p><i class="fas fa-user-tie"></i> Contact Person: Jayvee Caringal</p>
+                        </div>
+                    </div>
+                    
+                    <button class="back-btn" id="backFromForgot">
+                        <i class="fas fa-arrow-left"></i> Back to Login
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="loading-content">
+                    <div class="spinner"></div>
+                    <p>Processing...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="system-status">
+            <p><i class="fas fa-shield-alt"></i> Secure Authentication System</p>
+            <p><i class="fas fa-users"></i> Member Count: <span id="memberCount">0</span> users</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2024 Pangkat Dalawa - Unofficial Seal System | For authorized members only</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
