@@ -1,8 +1,6 @@
 <?php
-require_once 'config.php';
-
 class Database {
-    private $host = "localhost";
+    private $host = "127.0.0.1";  // Changed to 127.0.0.1
     private $db_name = "pangkat_dalawa";
     private $username = "root";
     private $password = "";
@@ -19,7 +17,7 @@ class Database {
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->conn->exec("set names utf8");
         } catch(PDOException $exception) {
-            echo "Connection error: " . $exception->getMessage();
+            error_log("Connection error: " . $exception->getMessage());
         }
         return $this->conn;
     }
