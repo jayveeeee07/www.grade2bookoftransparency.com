@@ -4,19 +4,498 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pangkat Dalawa - Unofficial Seal</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo-frame {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border: 8px solid #ffd700;
+            border-radius: 50%;
+            padding: 10px;
+            background: linear-gradient(135deg, #fffde7, #fff9c4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-frame::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .logo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #1a237e;
+        }
+
+        .logo-text h1 {
+            color: #ffd700;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-text h2 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .logo-text .subtitle {
+            color: #e0e0e0;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Login Container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #ffd700, #ffab00, #ffd700);
+        }
+
+        /* Forms */
+        .login-form,
+        .register-form,
+        .forgot-panel {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .active-form {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h3 {
+            color: #1a237e;
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 i {
+            color: #ffd700;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1a237e;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3949ab;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.1);
+        }
+
+        .hint {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: #1a237e;
+        }
+
+        /* Buttons */
+        .login-btn,
+        .register-btn,
+        .back-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn {
+            background: linear-gradient(to right, #1a237e, #3949ab);
+            color: white;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(to right, #3949ab, #1a237e);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(26, 35, 126, 0.3);
+        }
+
+        .register-btn {
+            background: linear-gradient(to right, #ff8f00, #ffab00);
+            color: white;
+        }
+
+        .register-btn:hover {
+            background: linear-gradient(to right, #ffab00, #ff8f00);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 143, 0, 0.3);
+        }
+
+        .back-btn {
+            background: #757575;
+            color: white;
+        }
+
+        .back-btn:hover {
+            background: #616161;
+            transform: translateY(-2px);
+        }
+
+        /* Form Links */
+        .form-links {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link {
+            color: #3949ab;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .link:hover {
+            color: #1a237e;
+            text-decoration: underline;
+        }
+
+        /* Forgot Panel */
+        .forgot-panel {
+            text-align: center;
+        }
+
+        .forgot-content {
+            padding: 20px;
+        }
+
+        .forgot-icon {
+            font-size: 4rem;
+            color: #3949ab;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .forgot-content p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .admin-contact {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ffd700;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .admin-contact h4 {
+            color: #1a237e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+            color: #444;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-info i {
+            color: #3949ab;
+            width: 20px;
+        }
+
+        /* Messages */
+        .error-message {
+            margin-top: 15px;
+            padding: 12px;
+            background: #ffebee;
+            color: #c62828;
+            border-radius: 8px;
+            border-left: 4px solid #c62828;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        .success-message {
+            margin-top: 15px;
+            padding: 12px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 8px;
+            border-left: 4px solid #2e7d32;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            border-radius: 20px;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #1a237e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-content p {
+            color: #1a237e;
+            font-weight: 500;
+        }
+
+        /* System Status */
+        .system-status {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 0.85rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .system-status p {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .system-status i {
+            color: #ffd700;
+        }
+
+        #memberCount {
+            font-weight: 600;
+            color: #ffd700;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            padding: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+            
+            .logo-frame {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .logo-text h2 {
+                font-size: 1.6rem;
+            }
+            
+            h3 {
+                font-size: 1.2rem;
+            }
+            
+            .system-status {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Login Check -->
+    <script>
+        // Check if user is already logged in
+        (function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            const username = currentUser.username;
+            const userRole = currentUser.role;
+            
+            if (username && userRole) {
+                // Redirect based on role
+                if (userRole === 'admin') {
+                    window.location.href = 'adminpanel.html';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            }
+        })();
+    </script>
+
     <div class="container">
         <div class="login-container">
             <!-- Logo Section -->
             <div class="logo-section">
                 <div class="logo-frame">
-                    <img src="logo1.jpg" alt="Pangkat Dalawa Unofficial Seal" class="logo">
+                    <!-- Replace with your actual logo -->
+                    <div class="logo" style="background: linear-gradient(135deg, #1a237e, #3949ab); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.5rem;">
+                        PD
+                    </div>
                 </div>
                 <div class="logo-text">
                     <h1>UNOFFICIAL SEAL OF</h1>
@@ -30,7 +509,7 @@
                 <h3><i class="fas fa-sign-in-alt"></i> Member Login</h3>
                 
                 <div class="form-group">
-                    <label for="username">
+                    <label for="loginUsername">
                         <i class="fas fa-user-circle"></i> Username
                     </label>
                     <input 
@@ -44,7 +523,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">
+                    <label for="loginPassword">
                         <i class="fas fa-lock"></i> Password
                     </label>
                     <div class="password-container">
@@ -192,6 +671,372 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // User Database Management
+        class UserDatabase {
+            constructor() {
+                this.storageKey = 'pangkatDalawaUsers';
+                this.currentUserKey = 'currentUser';
+                this.initializeDefaultUsers();
+            }
+
+            // Initialize with default users
+            initializeDefaultUsers() {
+                let users = this.getUsers();
+                
+                // Add default users if none exist
+                if (users.length === 0) {
+                    const defaultUsers = [
+                        { username: 'admin', password: 'ADMIN01', role: 'admin', fullName: 'Administrator' },
+                        { username: 'jayvee', password: 'ADMIN01', role: 'admin', fullName: 'Jayvee Caringal' },
+                        { username: 'marjhon', password: 'SECMJ', role: 'secretary', fullName: 'Mar Jhon Luyao' },
+                        { username: 'christian', password: 'TREASCL', role: 'treasurer', fullName: 'Christian Lasponia' },
+                        { username: 'princess', password: 'VPRESPL', role: 'vicepresident', fullName: 'Princess Padilla' },
+                        { username: 'guest', password: 'guest', role: 'guest', fullName: 'Guest User' }
+                    ];
+                    
+                    users = defaultUsers.map(user => ({
+                        ...user,
+                        createdAt: new Date().toISOString(),
+                        lastLogin: null
+                    }));
+                    
+                    this.saveUsers(users);
+                }
+                
+                this.updateMemberCount();
+            }
+
+            // Get all users
+            getUsers() {
+                const usersJson = localStorage.getItem(this.storageKey);
+                return usersJson ? JSON.parse(usersJson) : [];
+            }
+
+            // Save users to localStorage
+            saveUsers(users) {
+                localStorage.setItem(this.storageKey, JSON.stringify(users));
+                this.updateMemberCount();
+            }
+
+            // Update member count display
+            updateMemberCount() {
+                const users = this.getUsers();
+                const memberCountElement = document.getElementById('memberCount');
+                if (memberCountElement) {
+                    memberCountElement.textContent = users.length;
+                }
+            }
+
+            // Check if username exists
+            usernameExists(username) {
+                const users = this.getUsers();
+                return users.some(user => user.username.toLowerCase() === username.toLowerCase());
+            }
+
+            // Register new user
+            registerUser(username, password) {
+                if (this.usernameExists(username)) {
+                    return { success: false, message: 'Username already exists' };
+                }
+
+                if (username.length < 3) {
+                    return { success: false, message: 'Username must be at least 3 characters' };
+                }
+
+                if (password.length < 6) {
+                    return { success: false, message: 'Password must be at least 6 characters' };
+                }
+
+                const users = this.getUsers();
+                const newUser = {
+                    username: username.trim(),
+                    password: password,
+                    role: 'member',
+                    fullName: username.trim(),
+                    createdAt: new Date().toISOString(),
+                    lastLogin: null
+                };
+
+                users.push(newUser);
+                this.saveUsers(users);
+                
+                return { success: true, message: 'Account created successfully!' };
+            }
+
+            // Authenticate user
+            authenticate(username, password) {
+                const users = this.getUsers();
+                const user = users.find(u => 
+                    u.username.toLowerCase() === username.toLowerCase() && 
+                    u.password === password
+                );
+
+                if (user) {
+                    // Update last login
+                    user.lastLogin = new Date().toISOString();
+                    this.saveUsers(users);
+                    
+                    // Store current user with role
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        username: user.username,
+                        role: user.role || 'member',
+                        fullName: user.fullName,
+                        loginTime: new Date().toISOString()
+                    }));
+                    
+                    return { 
+                        success: true, 
+                        user,
+                        isAdmin: user.role === 'admin'
+                    };
+                }
+                
+                return { success: false, message: 'Invalid username or password' };
+            }
+
+            // Logout
+            logout() {
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('username');
+                localStorage.removeItem('userRole');
+            }
+        }
+
+        // Initialize database
+        const userDB = new UserDatabase();
+
+        // DOM Elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form elements
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const forgotPanel = document.getElementById('forgotPanel');
+            const loginError = document.getElementById('loginError');
+            const registerError = document.getElementById('registerError');
+            const registerSuccess = document.getElementById('registerSuccess');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            // Navigation links
+            const showRegisterLink = document.getElementById('showRegister');
+            const showLoginLink = document.getElementById('showLogin');
+            const showForgotLink = document.getElementById('showForgot');
+            const backFromForgotBtn = document.getElementById('backFromForgot');
+
+            // Password toggle functionality
+            document.querySelectorAll('.toggle-password').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const passwordInput = document.getElementById(targetId);
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    // Toggle eye icon
+                    const icon = this.querySelector('i');
+                    icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+                });
+            });
+
+            // Show login form
+            function showLoginForm() {
+                loginForm.classList.add('active-form');
+                registerForm.style.display = 'none';
+                forgotPanel.style.display = 'none';
+                clearMessages();
+            }
+
+            // Show register form
+            function showRegisterForm() {
+                loginForm.classList.remove('active-form');
+                registerForm.style.display = 'block';
+                forgotPanel.style.display = 'none';
+                clearMessages();
+            }
+
+            // Show forgot password panel
+            function showForgotPanel() {
+                loginForm.classList.remove('active-form');
+                registerForm.style.display = 'none';
+                forgotPanel.style.display = 'block';
+                clearMessages();
+            }
+
+            // Clear all messages
+            function clearMessages() {
+                loginError.style.display = 'none';
+                registerError.style.display = 'none';
+                registerSuccess.style.display = 'none';
+            }
+
+            // Show loading
+            function showLoading(show) {
+                loadingOverlay.style.display = show ? 'flex' : 'none';
+            }
+
+            // Show message with animation
+            function showMessage(element, message, isError = true) {
+                element.textContent = message;
+                element.style.display = 'block';
+                
+                if (isError) {
+                    element.className = 'error-message';
+                    element.style.animation = 'shake 0.5s ease';
+                    setTimeout(() => {
+                        element.style.animation = '';
+                    }, 500);
+                } else {
+                    element.className = 'success-message';
+                }
+            }
+
+            // Add shake animation for errors
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    25% { transform: translateX(-10px); }
+                    75% { transform: translateX(10px); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Event Listeners for navigation
+            showRegisterLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showRegisterForm();
+                document.getElementById('regUsername').focus();
+            });
+
+            showLoginLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showLoginForm();
+                document.getElementById('loginUsername').focus();
+            });
+
+            showForgotLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showForgotPanel();
+            });
+
+            backFromForgotBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showLoginForm();
+            });
+
+            // Login form submission
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('loginUsername').value.trim();
+                const password = document.getElementById('loginPassword').value;
+                
+                // Validation
+                if (!username || !password) {
+                    showMessage(loginError, 'Please enter both username and password');
+                    return;
+                }
+                
+                showLoading(true);
+                
+                // Simulate network delay
+                setTimeout(() => {
+                    const result = userDB.authenticate(username, password);
+                    
+                    showLoading(false);
+                    
+                    if (result.success) {
+                        // Show success message briefly before redirecting
+                        const welcomeMsg = result.isAdmin 
+                            ? 'Welcome, Administrator! Redirecting...' 
+                            : 'Login successful! Redirecting...';
+                        showMessage(loginError, welcomeMsg, false);
+                        
+                        // Redirect based on role
+                        setTimeout(() => {
+                            if (result.isAdmin) {
+                                window.location.href = 'adminpanel.html';
+                            } else {
+                                window.location.href = 'dashboard.html';
+                            }
+                        }, 1000);
+                    } else {
+                        showMessage(loginError, result.message || 'Invalid credentials');
+                        
+                        // Shake animation
+                        loginForm.style.animation = 'shake 0.5s ease';
+                        setTimeout(() => {
+                            loginForm.style.animation = '';
+                        }, 500);
+                    }
+                }, 1000);
+            });
+
+            // Register form submission
+            registerForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('regUsername').value.trim();
+                const password = document.getElementById('regPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                // Validation
+                if (!username || !password || !confirmPassword) {
+                    showMessage(registerError, 'Please fill in all fields');
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    showMessage(registerError, 'Passwords do not match');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    showMessage(registerError, 'Password must be at least 6 characters');
+                    return;
+                }
+                
+                if (username.length < 3) {
+                    showMessage(registerError, 'Username must be at least 3 characters');
+                    return;
+                }
+                
+                // Prevent registering as admin
+                if (username.toLowerCase() === 'admin') {
+                    showMessage(registerError, 'Cannot register as admin. Please choose another username.');
+                    return;
+                }
+                
+                showLoading(true);
+                
+                // Simulate network delay
+                setTimeout(() => {
+                    const result = userDB.registerUser(username, password);
+                    
+                    showLoading(false);
+                    
+                    if (result.success) {
+                        // Show success message
+                        showMessage(registerSuccess, result.message, false);
+                        
+                        // Clear form
+                        registerForm.reset();
+                        
+                        // Auto-switch to login form after delay
+                        setTimeout(() => {
+                            showLoginForm();
+                            document.getElementById('loginUsername').value = username;
+                            document.getElementById('loginUsername').focus();
+                        }, 2000);
+                    } else {
+                        showMessage(registerError, result.message);
+                    }
+                }, 1000);
+            });
+
+            // Auto-focus username field on page load
+            document.getElementById('loginUsername').focus();
+        });
+    </script>
 </body>
 </html>
