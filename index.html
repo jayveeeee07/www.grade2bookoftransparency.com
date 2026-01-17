@@ -462,6 +462,36 @@
             border: 1px solid #ffcdd2;
         }
 
+        /* XAMPP Status */
+        .xampp-status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        .xampp-running {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #bbdefb;
+        }
+
+        .xampp-stopped {
+            background-color: #fff3e0;
+            color: #ef6c00;
+            border: 1px solid #ffe0b2;
+        }
+
+        /* Server Info */
+        .server-info {
+            margin-top: 10px;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+        }
+
         /* Responsive */
         @media (max-width: 480px) {
             .login-container {
@@ -522,18 +552,23 @@
                 <div class="logo-text">
                     <h1>UNOFFICIAL SEAL OF</h1>
                     <h2>PANGKAT DALAWA</h2>
-                    <p class="subtitle">MySQL Database Authentication System</p>
+                    <p class="subtitle">XAMPP MySQL Database System</p>
                 </div>
             </div>
 
             <!-- Connection Status -->
             <div id="connectionStatus" class="connection-status">
-                <i class="fas fa-spinner fa-spin"></i> Checking database connection...
+                <i class="fas fa-spinner fa-spin"></i> Connecting to MySQL database...
+            </div>
+
+            <!-- XAMPP Status -->
+            <div id="xamppStatus" class="xampp-status">
+                <i class="fas fa-server"></i> Checking XAMPP services...
             </div>
 
             <!-- Login Form -->
             <form id="loginForm" class="login-form active-form">
-                <h3><i class="fas fa-sign-in-alt"></i> Member Login</h3>
+                <h3><i class="fas fa-sign-in-alt"></i> Database Login</h3>
                 
                 <div class="form-group">
                     <label for="loginUsername">
@@ -543,7 +578,7 @@
                         type="text" 
                         id="loginUsername" 
                         name="username" 
-                        placeholder="Enter your username" 
+                        placeholder="Enter database username" 
                         required
                         autocomplete="username"
                     >
@@ -558,7 +593,7 @@
                             type="password" 
                             id="loginPassword" 
                             name="password" 
-                            placeholder="Enter your password" 
+                            placeholder="Enter database password" 
                             required
                             autocomplete="current-password"
                         >
@@ -569,12 +604,12 @@
                 </div>
                 
                 <button type="submit" class="login-btn">
-                    <i class="fas fa-unlock"></i> LOGIN TO DATABASE
+                    <i class="fas fa-database"></i> CONNECT TO DATABASE
                 </button>
                 
                 <div class="form-links">
                     <a href="#" class="link" id="showRegister">
-                        <i class="fas fa-user-plus"></i> Don't have account? Create Account
+                        <i class="fas fa-user-plus"></i> Register New Account
                     </a>
                     <a href="#" class="link" id="showForgot">
                         <i class="fas fa-question-circle"></i> Forgot Password?
@@ -586,7 +621,7 @@
 
             <!-- Register Form -->
             <form id="registerForm" class="register-form">
-                <h3><i class="fas fa-user-plus"></i> Create New Account</h3>
+                <h3><i class="fas fa-user-plus"></i> Create Database Account</h3>
                 
                 <div class="form-group">
                     <label for="regUsername">
@@ -599,7 +634,7 @@
                         placeholder="Choose a username" 
                         required
                     >
-                    <small class="hint">Minimum 3 characters</small>
+                    <small class="hint">Stored in MySQL database</small>
                 </div>
                 
                 <div class="form-group">
@@ -624,7 +659,7 @@
                             type="password" 
                             id="regPassword" 
                             name="password" 
-                            placeholder="Create a password" 
+                            placeholder="Create a secure password" 
                             required
                         >
                         <button type="button" class="toggle-password" data-target="regPassword">
@@ -653,7 +688,7 @@
                 </div>
                 
                 <button type="submit" class="register-btn">
-                    <i class="fas fa-user-check"></i> CREATE ACCOUNT
+                    <i class="fas fa-user-check"></i> CREATE DATABASE ACCOUNT
                 </button>
                 
                 <div class="form-links">
@@ -668,19 +703,19 @@
 
             <!-- Forgot Password Panel -->
             <div id="forgotPanel" class="forgot-panel">
-                <h3><i class="fas fa-key"></i> Forgot Password</h3>
+                <h3><i class="fas fa-key"></i> Database Password Recovery</h3>
                 <div class="forgot-content">
                     <div class="forgot-icon">
-                        <i class="fas fa-headset"></i>
+                        <i class="fas fa-database"></i>
                     </div>
-                    <p>If you've forgotten your password, please contact the system administrator for assistance.</p>
+                    <p>For security reasons, database passwords cannot be recovered. Please contact the system administrator to reset your password.</p>
                     
                     <div class="admin-contact">
-                        <h4><i class="fas fa-user-shield"></i> Contact Administrator</h4>
+                        <h4><i class="fas fa-user-shield"></i> Contact Database Administrator</h4>
                         <div class="contact-info">
-                            <p><i class="fas fa-envelope"></i> Email: admin@pangkatdalawa.com</p>
-                            <p><i class="fas fa-phone"></i> Phone: (02) 1234-5678</p>
-                            <p><i class="fas fa-user-tie"></i> Contact Person: Jayvee Caringal</p>
+                            <p><i class="fas fa-server"></i> Server: 127.0.0.1</p>
+                            <p><i class="fas fa-database"></i> Database: pangkat_dalawa</p>
+                            <p><i class="fas fa-user-tie"></i> DBA: Jayvee Caringal</p>
                         </div>
                     </div>
                     
@@ -694,49 +729,87 @@
             <div class="loading-overlay" id="loadingOverlay">
                 <div class="loading-content">
                     <div class="spinner"></div>
-                    <p>Connecting to database...</p>
+                    <p>Connecting to MySQL database...</p>
                 </div>
             </div>
         </div>
 
         <!-- System Status -->
         <div class="system-status">
-            <p><i class="fas fa-database"></i> MySQL Database Active</p>
-            <p><i class="fas fa-users"></i> Members: <span id="memberCount">Loading...</span></p>
+            <p><i class="fas fa-server"></i> Server: 127.0.0.1</p>
+            <p><i class="fas fa-users"></i> Database Users: <span id="memberCount">0</span></p>
+        </div>
+
+        <!-- Server Info -->
+        <div class="server-info">
+            <p><i class="fas fa-info-circle"></i> XAMPP MySQL | PHP Backend | 127.0.0.1:80</p>
         </div>
 
         <!-- Footer -->
         <div class="footer">
-            <p>© 2024 Pangkat Dalawa - XAMPP MySQL System | Powered by PHP & MySQL</p>
+            <p>© 2024 Pangkat Dalawa - XAMPP MySQL System | Server: 127.0.0.1</p>
         </div>
     </div>
 
     <script>
-        // API Configuration
-        const API_BASE_URL = 'http://localhost/pangkat-dalawa/api';
+        // API Configuration - Using 127.0.0.1
+        const API_BASE_URL = 'http://127.0.0.1/pangkat-dalawa/api';
         
         // MySQL Database Class
         class MySQLDatabase {
             constructor() {
+                this.checkXAMPPStatus();
                 this.checkConnection();
+            }
+
+            async checkXAMPPStatus() {
+                const statusEl = document.getElementById('xamppStatus');
+                try {
+                    // Try to connect to Apache
+                    const response = await fetch('http://127.0.0.1/', { 
+                        method: 'HEAD',
+                        mode: 'no-cors'
+                    }).catch(() => null);
+                    
+                    statusEl.innerHTML = '<i class="fas fa-check-circle"></i> XAMPP Apache is running';
+                    statusEl.className = 'xampp-status xampp-running';
+                    statusEl.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        statusEl.style.display = 'none';
+                    }, 3000);
+                    
+                } catch (error) {
+                    statusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Start XAMPP Apache first';
+                    statusEl.className = 'xampp-status xampp-stopped';
+                    statusEl.style.display = 'block';
+                }
             }
 
             async checkConnection() {
                 const statusEl = document.getElementById('connectionStatus');
                 try {
-                    const response = await fetch(`${API_BASE_URL}/test-connection.php`);
+                    const response = await fetch(`${API_BASE_URL}/test-connection.php`, {
+                        signal: AbortSignal.timeout(5000)
+                    });
+                    
                     if (response.ok) {
-                        statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Database connected successfully!';
+                        const data = await response.json();
+                        statusEl.innerHTML = `<i class="fas fa-check-circle"></i> ${data.message}`;
                         statusEl.className = 'connection-status connection-online';
                         statusEl.style.display = 'block';
                         
                         // Update member count
                         this.updateMemberCount();
+                        
+                        setTimeout(() => {
+                            statusEl.style.display = 'none';
+                        }, 3000);
                     } else {
                         throw new Error('Connection failed');
                     }
                 } catch (error) {
-                    statusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Database connection failed. Please check XAMPP.';
+                    statusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> MySQL connection failed. Check XAMPP MySQL service.';
                     statusEl.className = 'connection-status connection-offline';
                     statusEl.style.display = 'block';
                     console.error('Database connection error:', error);
@@ -769,6 +842,10 @@
                         })
                     });
                     
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
                     const data = await response.json();
                     
                     if (data.success) {
@@ -784,7 +861,10 @@
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    return { success: false, message: 'Database connection error. Check XAMPP.' };
+                    return { 
+                        success: false, 
+                        message: 'Cannot connect to database server. Please check: 1) XAMPP is running 2) MySQL service is started 3) Server: 127.0.0.1' 
+                    };
                 }
             }
 
@@ -803,6 +883,10 @@
                         })
                     });
                     
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
                     const data = await response.json();
                     
                     if (data.success) {
@@ -813,7 +897,10 @@
                     return data;
                 } catch (error) {
                     console.error('Registration error:', error);
-                    return { success: false, message: 'Database connection error' };
+                    return { 
+                        success: false, 
+                        message: 'Cannot connect to database server. Make sure XAMPP is running on 127.0.0.1' 
+                    };
                 }
             }
 
@@ -1110,6 +1197,12 @@
                             : `Welcome, ${result.user.full_name}! Redirecting...`;
                         showMessage(loginError, welcomeMsg, false);
                         
+                        // Store server info
+                        localStorage.setItem('serverInfo', JSON.stringify({
+                            server: '127.0.0.1',
+                            connectedAt: new Date().toISOString()
+                        }));
+                        
                         // Redirect based on role
                         setTimeout(() => {
                             if (result.isAdmin) {
@@ -1119,7 +1212,7 @@
                             }
                         }, 1500);
                     } else {
-                        showMessage(loginError, result.message || 'Invalid credentials');
+                        showMessage(loginError, result.message);
                         
                         // Shake animation
                         loginForm.style.animation = 'shake 0.5s ease';
@@ -1129,7 +1222,7 @@
                     }
                 } catch (error) {
                     showLoading(false);
-                    showMessage(loginError, 'Database connection error. Please check XAMPP.');
+                    showMessage(loginError, 'Database connection error. Please check XAMPP services on 127.0.0.1');
                 }
             });
 
@@ -1178,7 +1271,7 @@
                     
                     if (result.success) {
                         // Show success message
-                        showMessage(registerSuccess, result.message, false);
+                        showMessage(registerSuccess, 'Account created in MySQL database!', false);
                         
                         // Clear form
                         registerForm.reset();
@@ -1194,7 +1287,7 @@
                     }
                 } catch (error) {
                     showLoading(false);
-                    showMessage(registerError, 'Registration failed. Database connection error.');
+                    showMessage(registerError, 'Registration failed. Database connection error on 127.0.0.1');
                 }
             });
 
@@ -1211,6 +1304,10 @@
                     }
                 }
             });
+
+            // Display server info
+            document.getElementById('loginUsername').placeholder = "e.g., admin, marjhon";
+            document.getElementById('loginPassword').placeholder = "Use database passwords";
         });
 
         // Export database instance for use in other pages
