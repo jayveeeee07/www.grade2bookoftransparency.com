@@ -440,6 +440,28 @@
             padding: 10px;
         }
 
+        /* Connection Status */
+        .connection-status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        .connection-online {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .connection-offline {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
         /* Responsive */
         @media (max-width: 480px) {
             .login-container {
@@ -500,8 +522,13 @@
                 <div class="logo-text">
                     <h1>UNOFFICIAL SEAL OF</h1>
                     <h2>PANGKAT DALAWA</h2>
-                    <p class="subtitle">Member Authentication System</p>
+                    <p class="subtitle">MySQL Database Authentication System</p>
                 </div>
+            </div>
+
+            <!-- Connection Status -->
+            <div id="connectionStatus" class="connection-status">
+                <i class="fas fa-spinner fa-spin"></i> Checking database connection...
             </div>
 
             <!-- Login Form -->
@@ -542,7 +569,7 @@
                 </div>
                 
                 <button type="submit" class="login-btn">
-                    <i class="fas fa-unlock"></i> LOGIN
+                    <i class="fas fa-unlock"></i> LOGIN TO DATABASE
                 </button>
                 
                 <div class="form-links">
@@ -573,6 +600,19 @@
                         required
                     >
                     <small class="hint">Minimum 3 characters</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fullName">
+                        <i class="fas fa-id-card"></i> Full Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        name="fullName" 
+                        placeholder="Enter your full name" 
+                        required
+                    >
                 </div>
                 
                 <div class="form-group">
@@ -638,9 +678,9 @@
                     <div class="admin-contact">
                         <h4><i class="fas fa-user-shield"></i> Contact Administrator</h4>
                         <div class="contact-info">
-                            <p><i class="fas fa-envelope"></i> Email: jayveecaringal07@yahoo.com</p>
-                            <p><i class="fas fa-phone"></i> Telegram: @JaysGumcar</p>
-                            <p><i class="fas fa-user-tie"></i> Contact Person: Jayvee G. Caringal</p>
+                            <p><i class="fas fa-envelope"></i> Email: admin@pangkatdalawa.com</p>
+                            <p><i class="fas fa-phone"></i> Phone: (02) 1234-5678</p>
+                            <p><i class="fas fa-user-tie"></i> Contact Person: Jayvee Caringal</p>
                         </div>
                     </div>
                     
@@ -654,158 +694,277 @@
             <div class="loading-overlay" id="loadingOverlay">
                 <div class="loading-content">
                     <div class="spinner"></div>
-                    <p>Processing...</p>
+                    <p>Connecting to database...</p>
                 </div>
             </div>
         </div>
 
         <!-- System Status -->
         <div class="system-status">
-            <p><i class="fas fa-shield-alt"></i> Secure Authentication System</p>
-            <p><i class="fas fa-users"></i> Member Count: <span id="memberCount">0</span> users</p>
+            <p><i class="fas fa-database"></i> MySQL Database Active</p>
+            <p><i class="fas fa-users"></i> Members: <span id="memberCount">Loading...</span></p>
         </div>
 
         <!-- Footer -->
         <div class="footer">
-            <p>© 2026 UNOFFICIAL SEAL OF PANGKAT DALAWA SYSTEM |FOR AUTHORIZED MEMBERS ONLY</p>
+            <p>© 2024 Pangkat Dalawa - XAMPP MySQL System | Powered by PHP & MySQL</p>
         </div>
     </div>
 
     <script>
-        // User Database Management
-        class UserDatabase {
+        // API Configuration
+        const API_BASE_URL = 'http://localhost/pangkat-dalawa/api';
+        
+        // MySQL Database Class
+        class MySQLDatabase {
             constructor() {
-                this.storageKey = 'pangkatDalawaUsers';
-                this.currentUserKey = 'currentUser';
-                this.initializeDefaultUsers();
+                this.checkConnection();
             }
 
-            // Initialize with default users
-            initializeDefaultUsers() {
-                let users = this.getUsers();
-                
-                // Add default users if none exist
-                if (users.length === 0) {
-                    const defaultUsers = [
-                        { username: 'ADMIN', password: 'ADMIN01', role: 'admin', fullName: 'Administrator' },
-                        { username: 'JB', password: 'ADMIN01', role: 'admin', fullName: 'Jayvee Caringal' },
-                        { username: 'MJ', password: 'SECMJ', role: 'secretary', fullName: 'Mar Jhon Luyao' },
-                        { username: 'TIAN', password: 'TREASCL', role: 'treasurer', fullName: 'Christian Lasponia' },
-                        { username: '', password: '', role: '', fullName: '' },
-                        { username: '', password: '', role: 'guest', fullName: '' }
-                    ];
+            async checkConnection() {
+                const statusEl = document.getElementById('connectionStatus');
+                try {
+                    const response = await fetch(`${API_BASE_URL}/test-connection.php`);
+                    if (response.ok) {
+                        statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Database connected successfully!';
+                        statusEl.className = 'connection-status connection-online';
+                        statusEl.style.display = 'block';
+                        
+                        // Update member count
+                        this.updateMemberCount();
+                    } else {
+                        throw new Error('Connection failed');
+                    }
+                } catch (error) {
+                    statusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Database connection failed. Please check XAMPP.';
+                    statusEl.className = 'connection-status connection-offline';
+                    statusEl.style.display = 'block';
+                    console.error('Database connection error:', error);
+                }
+            }
+
+            async updateMemberCount() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/users.php?action=count`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        document.getElementById('memberCount').textContent = data.count || 0;
+                    }
+                } catch (error) {
+                    console.error('Error updating member count:', error);
+                }
+            }
+
+            async authenticate(username, password) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/auth.php`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'login',
+                            username: username,
+                            password: password
+                        })
+                    });
                     
-                    users = defaultUsers.map(user => ({
-                        ...user,
-                        createdAt: new Date().toISOString(),
-                        lastLogin: null
-                    }));
+                    const data = await response.json();
                     
-                    this.saveUsers(users);
-                }
-                
-                this.updateMemberCount();
-            }
-
-            // Get all users
-            getUsers() {
-                const usersJson = localStorage.getItem(this.storageKey);
-                return usersJson ? JSON.parse(usersJson) : [];
-            }
-
-            // Save users to localStorage
-            saveUsers(users) {
-                localStorage.setItem(this.storageKey, JSON.stringify(users));
-                this.updateMemberCount();
-            }
-
-            // Update member count display
-            updateMemberCount() {
-                const users = this.getUsers();
-                const memberCountElement = document.getElementById('memberCount');
-                if (memberCountElement) {
-                    memberCountElement.textContent = users.length;
+                    if (data.success) {
+                        // Store user data in localStorage
+                        localStorage.setItem('currentUser', JSON.stringify(data.user));
+                        return {
+                            success: true,
+                            user: data.user,
+                            isAdmin: data.user.role === 'admin'
+                        };
+                    } else {
+                        return { success: false, message: data.message };
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    return { success: false, message: 'Database connection error. Check XAMPP.' };
                 }
             }
 
-            // Check if username exists
-            usernameExists(username) {
-                const users = this.getUsers();
-                return users.some(user => user.username.toLowerCase() === username.toLowerCase());
-            }
-
-            // Register new user
-            registerUser(username, password) {
-                if (this.usernameExists(username)) {
-                    return { success: false, message: 'Username already exists' };
-                }
-
-                if (username.length < 3) {
-                    return { success: false, message: 'Username must be at least 3 characters' };
-                }
-
-                if (password.length < 6) {
-                    return { success: false, message: 'Password must be at least 6 characters' };
-                }
-
-                const users = this.getUsers();
-                const newUser = {
-                    username: username.trim(),
-                    password: password,
-                    role: 'member',
-                    fullName: username.trim(),
-                    createdAt: new Date().toISOString(),
-                    lastLogin: null
-                };
-
-                users.push(newUser);
-                this.saveUsers(users);
-                
-                return { success: true, message: 'Account created successfully!' };
-            }
-
-            // Authenticate user
-            authenticate(username, password) {
-                const users = this.getUsers();
-                const user = users.find(u => 
-                    u.username.toLowerCase() === username.toLowerCase() && 
-                    u.password === password
-                );
-
-                if (user) {
-                    // Update last login
-                    user.lastLogin = new Date().toISOString();
-                    this.saveUsers(users);
+            async registerUser(username, password, fullName) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/auth.php`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'register',
+                            username: username,
+                            password: password,
+                            full_name: fullName
+                        })
+                    });
                     
-                    // Store current user with role
-                    localStorage.setItem('currentUser', JSON.stringify({
-                        username: user.username,
-                        role: user.role || 'member',
-                        fullName: user.fullName,
-                        loginTime: new Date().toISOString()
-                    }));
+                    const data = await response.json();
                     
-                    return { 
-                        success: true, 
-                        user,
-                        isAdmin: user.role === 'admin'
-                    };
+                    if (data.success) {
+                        // Update member count
+                        this.updateMemberCount();
+                    }
+                    
+                    return data;
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    return { success: false, message: 'Database connection error' };
                 }
-                
-                return { success: false, message: 'Invalid username or password' };
             }
 
-            // Logout
-            logout() {
-                localStorage.removeItem('currentUser');
-                localStorage.removeItem('isAuthenticated');
-                localStorage.removeItem('username');
-                localStorage.removeItem('userRole');
+            async getUser(username) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/users.php?username=${username}`);
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                    return null;
+                } catch (error) {
+                    console.error('Get user error:', error);
+                    return null;
+                }
+            }
+
+            async updateUser(username, updates) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/users.php`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            ...updates
+                        })
+                    });
+                    return await response.json();
+                } catch (error) {
+                    console.error('Update user error:', error);
+                    return { success: false, message: 'Update failed' };
+                }
+            }
+
+            async getAllUsers() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/users.php`);
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                    return [];
+                } catch (error) {
+                    console.error('Get all users error:', error);
+                    return [];
+                }
+            }
+
+            async getExpenses(month = null) {
+                try {
+                    let url = `${API_BASE_URL}/expenses.php`;
+                    if (month) {
+                        url += `?month=${month}`;
+                    }
+                    
+                    const response = await fetch(url);
+                    return await response.json();
+                } catch (error) {
+                    console.error('Get expenses error:', error);
+                    return [];
+                }
+            }
+
+            async saveExpenses(month, expenses) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/expenses.php`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            month: month,
+                            expenses: expenses
+                        })
+                    });
+                    return await response.json();
+                } catch (error) {
+                    console.error('Save expenses error:', error);
+                    return { success: false, message: 'Save failed' };
+                }
+            }
+
+            async getPenalties(month = null) {
+                try {
+                    let url = `${API_BASE_URL}/penalties.php`;
+                    if (month) {
+                        url += `?month=${month}`;
+                    }
+                    const response = await fetch(url);
+                    return await response.json();
+                } catch (error) {
+                    console.error('Get penalties error:', error);
+                    return [];
+                }
+            }
+
+            async savePenalties(month, penalties) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/penalties.php`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            month: month,
+                            penalties: penalties
+                        })
+                    });
+                    return await response.json();
+                } catch (error) {
+                    console.error('Save penalties error:', error);
+                    return { success: false, message: 'Save failed' };
+                }
+            }
+
+            async getMonthly(month = null) {
+                try {
+                    let url = `${API_BASE_URL}/monthly.php`;
+                    if (month) {
+                        url += `?month=${month}`;
+                    }
+                    const response = await fetch(url);
+                    return await response.json();
+                } catch (error) {
+                    console.error('Get monthly error:', error);
+                    return [];
+                }
+            }
+
+            async saveMonthly(month, monthly) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/monthly.php`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            month: month,
+                            monthly: monthly
+                        })
+                    });
+                    return await response.json();
+                } catch (error) {
+                    console.error('Save monthly error:', error);
+                    return { success: false, message: 'Save failed' };
+                }
             }
         }
 
         // Initialize database
-        const userDB = new UserDatabase();
+        const db = new MySQLDatabase();
 
         // DOM Elements
         document.addEventListener('DOMContentLoaded', function() {
@@ -939,17 +1098,16 @@
                 
                 showLoading(true);
                 
-                // Simulate network delay
-                setTimeout(() => {
-                    const result = userDB.authenticate(username, password);
+                try {
+                    const result = await db.authenticate(username, password);
                     
                     showLoading(false);
                     
                     if (result.success) {
                         // Show success message briefly before redirecting
                         const welcomeMsg = result.isAdmin 
-                            ? 'Welcome, Administrator! Redirecting...' 
-                            : 'Login successful! Redirecting...';
+                            ? `Welcome, ${result.user.full_name}! Redirecting to Admin Panel...` 
+                            : `Welcome, ${result.user.full_name}! Redirecting...`;
                         showMessage(loginError, welcomeMsg, false);
                         
                         // Redirect based on role
@@ -959,7 +1117,7 @@
                             } else {
                                 window.location.href = 'dashboard.html';
                             }
-                        }, 1000);
+                        }, 1500);
                     } else {
                         showMessage(loginError, result.message || 'Invalid credentials');
                         
@@ -969,7 +1127,10 @@
                             loginForm.style.animation = '';
                         }, 500);
                     }
-                }, 1000);
+                } catch (error) {
+                    showLoading(false);
+                    showMessage(loginError, 'Database connection error. Please check XAMPP.');
+                }
             });
 
             // Register form submission
@@ -977,11 +1138,12 @@
                 e.preventDefault();
                 
                 const username = document.getElementById('regUsername').value.trim();
+                const fullName = document.getElementById('fullName').value.trim();
                 const password = document.getElementById('regPassword').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
                 
                 // Validation
-                if (!username || !password || !confirmPassword) {
+                if (!username || !password || !confirmPassword || !fullName) {
                     showMessage(registerError, 'Please fill in all fields');
                     return;
                 }
@@ -1009,9 +1171,8 @@
                 
                 showLoading(true);
                 
-                // Simulate network delay
-                setTimeout(() => {
-                    const result = userDB.registerUser(username, password);
+                try {
+                    const result = await db.registerUser(username, password, fullName);
                     
                     showLoading(false);
                     
@@ -1031,12 +1192,30 @@
                     } else {
                         showMessage(registerError, result.message);
                     }
-                }, 1000);
+                } catch (error) {
+                    showLoading(false);
+                    showMessage(registerError, 'Registration failed. Database connection error.');
+                }
             });
 
             // Auto-focus username field on page load
             document.getElementById('loginUsername').focus();
+            
+            // Add enter key navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    if (loginForm.classList.contains('active-form')) {
+                        document.querySelector('.login-btn').click();
+                    } else if (registerForm.style.display === 'block') {
+                        document.querySelector('.register-btn').click();
+                    }
+                }
+            });
         });
+
+        // Export database instance for use in other pages
+        window.MySQLDatabase = MySQLDatabase;
+        window.db = db;
     </script>
 </body>
 </html>
