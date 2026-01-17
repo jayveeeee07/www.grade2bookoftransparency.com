@@ -1,0 +1,23 @@
+RewriteEngine On
+
+# Redirect to HTTPS (optional)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Remove .php extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [NC,L]
+
+# API routing
+RewriteRule ^api/(.*)$ api/$1.php [NC,L]
+
+# Prevent directory listing
+Options -Indexes
+
+# Set CORS headers for API
+<FilesMatch "\.php$">
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</FilesMatch>
